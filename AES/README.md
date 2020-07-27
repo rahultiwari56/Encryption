@@ -1,4 +1,7 @@
-## A Simple Go Encryptor/Decryptor For AES-ECB Mode
+# A Simple Go Encryptor/Decryptor For AES-ECB Mode
+
+## Sopports - json/dict
+	    - string
 
 The secret key to use in the symmetric cipher. It must be 16 (AES-128), 24 (AES-192), or 32 (AES-256) bytes long.
 
