@@ -1,14 +1,22 @@
+import ast 
+import json
 import base64
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad  
 
 
+
 class AESCipher(object):
 
     def __init__(self, key):
-        self.key = pad(bytes(key, 'utf-8'), 32)
+        self.key = pad(bytes(key, 'utf-8'), 16)
 
     def encrypt(self, message):
+        res = isinstance(message, dict)
+        if res:
+            json_data = { "key": "value"}
+            message = json.dumps(json_data)
+
         message = bytes(message, 'utf-8')
         raw = pad(message,16)
         cipher = AES.new(self.key, AES.MODE_ECB)
@@ -19,10 +27,23 @@ class AESCipher(object):
         enc = base64.b64decode(enc)
         cipher = AES.new(self.key, AES.MODE_ECB)
         dec = cipher.decrypt(enc)
-        return unpad(dec,16).decode('utf-8')
+        res1 = unpad(dec,16).decode('utf-8')
+        try:
+            res2 = ast.literal_eval(res1)
+            print(type(res2))
+            return res2 
+        except:
+            print(type(res1))
+            return res1
 
 key = "your_key"
-message = "message_to_be_encrypted"
+
+# ---------> str
+message = 'rahul'
+
+# ---------> json/dict
+# message = { "key": "value"}
+# message = json.dumps(message)
 
 encryption = AESCipher(key)
 
